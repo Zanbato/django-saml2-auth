@@ -202,7 +202,7 @@ def acs(r):
 
     r.session.flush()
 
-    if target_user.is_active:
+    if target_user.is_active and (not settings.SAML2_AUTH.get('ALLOW_USER') or import_string(settings.SAML2_AUTH['ALLOW_USER'])(target_user)):
         target_user.backend = 'django.contrib.auth.backends.ModelBackend'
         login(r, target_user)
     else:
